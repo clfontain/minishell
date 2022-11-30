@@ -6,7 +6,7 @@
 #    By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/04/12 14:32:38 by cfontain          #+#    #+#              #
-#    Updated: 2022/10/12 16:53:31 by tnoulens         ###   ########.fr        #
+#    Updated: 2022/10/20 18:15:06 by tnoulens         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,7 @@ CORE		=	./srcs/core/prompt.c\
 				./srcs/core/pipex.c\
 				./srcs/core/execute.c\
 				./srcs/core/signals.c\
+				./srcs/core/signals_child.c\
 				./srcs/core/cmd_lexer.c\
 				./srcs/core/copy_dollar.c\
 				./srcs/core/build_env.c\
@@ -84,7 +85,7 @@ ${LIBFT}	:
 
 ${NAME}		: ${OBJS}  ${LIBFT}
 		@echo "\033[34m----Compiling----"
-		@${CC} ${FLAGS} ${OBJS} -L/usr/include -lreadline -o ${NAME} ${LIBFT}
+		@${CC} ${FLAGS} ${OBJS} -L/usr/include -lreadline -ltermcap -o ${NAME} ${LIBFT}
 		@${SUPP}
 		@echo "OK\033[0m"
 

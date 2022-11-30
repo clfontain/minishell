@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pipex.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: waxxy <waxxy@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 18:31:54 by tnoulens          #+#    #+#             */
-/*   Updated: 2022/10/14 01:34:42 by waxxy            ###   ########.fr       */
+/*   Updated: 2022/10/20 17:59:45 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ int	child_mgmt(int i, int cmd_nbr, t_minishell *ms)
 		return (perror("child_mgmt"), errno);
 	else if (!ms->pids[i])
 	{
+		child_sig_handler();
 		get_fd_in(ms->cm[i]);
 		if (i == 0 && cmd_nbr == 1)
 			dupper(ms->cm[i]->fd[0], ms->cm[i]->fd[1], ms, i);
@@ -112,13 +113,14 @@ int	pipex(t_minishell *ms)
 	i = -1;
 	while (++i < ms->nbr_cmd && ms->sigint == FALSE)
 	{
-		waitpid(ms->pids[i], &ret, 0);
+		waitpid(ms->pids[i], &ret, WUNTRACED);
 		if (WIFEXITED(ret))
 			ms->exec_ret = WEXITSTATUS(ret);
-		else if (ms->sigint == TRUE)
-			ms->exec_ret = 130;
 		else
-			ms->exec_ret = errno;
+		{
+			ms->exec_ret = WTERMSIG(ret) + 128;
+			ft_fprintf(2, "\ninterrupted with signal %d\n", ms->exec_ret);
+		}
 	}
 	return (ms->exec_ret);
 }

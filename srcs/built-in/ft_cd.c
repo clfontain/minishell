@@ -6,7 +6,7 @@
 /*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/16 11:14:25 by cfontain          #+#    #+#             */
-/*   Updated: 2022/10/11 20:54:50 by tnoulens         ###   ########.fr       */
+/*   Updated: 2022/10/19 19:18:48 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ static char	**update_opwd(t_minishell *ms)
 			error_clean_up(ms);
 		ptr[0] = NULL;
 		if (!getcwd(wd, PATH_MAX))
-			return (perror("cd: update opwd"), NULL);
+			return (free(ptr), perror("cd: update opwd"), NULL);
 		ptr[1] = ft_strjoin("OLDPWD=", wd);
 		if (ptr[1] == NULL)
 		{
@@ -71,7 +71,7 @@ static void	update_pwd(t_minishell *ms)
 			error_clean_up(ms);
 		ptr[0] = NULL;
 		if (!getcwd(wd, PATH_MAX))
-			return (perror("cd: update pwd"), (void)0);
+			return (free(ptr), perror("cd: update pwd"), (void)0);
 		ptr[1] = ft_strjoin("PWD=", wd);
 		if (ptr[1] == NULL)
 		{

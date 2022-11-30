@@ -6,7 +6,7 @@
 /*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 21:29:21 by tnoulens          #+#    #+#             */
-/*   Updated: 2022/10/06 17:49:31 by tnoulens         ###   ########.fr       */
+/*   Updated: 2022/10/19 19:09:23 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,18 +107,16 @@ int	exec(t_minishell *ms, char **cmds, char **envp)
 		if (ft_memchr(cmds[0], '/', ft_strlen(cmds[0])) || !genv(ms, "PATH"))
 		{
 			if (access(cmds[0], F_OK | X_OK) == 0)
-				cmd_path = cmds[0];
-			else if (errno == 13)
-				return (perror("access"), 126);
+				cmd_path = ft_strdup(cmds[0]);
 			else
-				return (perror("access"), errno);
+				return (perror("access"), permission(errno));
 		}
 		else
 			cmd_path = cmd_check(paths_maker(ms), cmds[0]);
 		if (!cmd_path || cmds[0][0] == '\0')
 			return (ft_putstr_fd(cmds[0], 2), ft_putendl_fd(NOTFOUND, 2), 127);
 		if (execve(cmd_path, cmds, envp) == -1)
-			return (free(cmd_path), perror("exec"), errno);
+			return (free(cmd_path), perror("exec"), permission(errno));
 	}
 	return (0);
 }

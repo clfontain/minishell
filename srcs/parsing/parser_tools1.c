@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parser_tools1.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: waxxy <waxxy@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/22 15:07:44 by waxxy             #+#    #+#             */
-/*   Updated: 2022/10/14 01:53:26 by waxxy            ###   ########.fr       */
+/*   Updated: 2022/10/17 15:00:41 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,7 +88,7 @@ int	ttok3(t_tok *tmp, t_command **pa, int *i, t_minishell *ms)
 		check_hd(pa, *i, ms, tmp->infos);
 	}
 	else
-		return (-2);
+		return (pa[*i]->limiter = NULL, pa[*i]->hdpath = NULL, -2);
 	ms->i.l = -1;
 	return (0);
 }

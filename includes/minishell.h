@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: waxxy <waxxy@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/16 14:50:14 by tnoulens          #+#    #+#             */
-/*   Updated: 2022/10/14 01:34:20 by waxxy            ###   ########.fr       */
+/*   Updated: 2022/10/20 18:01:19 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,9 @@
 # include <readline/history.h>
 # include <sys/types.h>
 # include <signal.h>
+# include <sys/ioctl.h>
+# include <term.h>
+# include <termios.h>
 # include <linux/limits.h>
 # include <limits.h>
 # include <errno.h>
@@ -53,6 +56,7 @@
 # define CMD_LEX 5
 # define PIPE_LEX 6
 # define NOTFOUND " command not found"
+# define CLEAR "\033[0K"
 
 /* Structure lexer */
 
@@ -232,6 +236,8 @@ int			ft_count_tab(char **str);
 int			copy_tab_with_space(char **argv, char *str);
 void		freer(char **ptr);
 void		init_int(t_minishell *ms, t_int *i);
+int			cmpheredoc(const char *p, const char *limiter, char c);
+int			permission(int err);
 
 	/* --- build-in --- */
 
@@ -246,6 +252,8 @@ int			ft_cd(t_minishell *ms, int argc, char **argv);
 	/* --- signals --- */
 void		tmp_handler(int sig, siginfo_t *info, void *context);
 void		signal_handling(void);
+void		tmp_child_handler(int sig, siginfo_t *info, void *context);
+void		child_sig_handler(void);
 
 /* Unique local variable to manage signals with sigaction() */
 

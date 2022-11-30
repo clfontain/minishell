@@ -6,7 +6,7 @@
 /*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/08/19 18:43:44 by tnoulens          #+#    #+#             */
-/*   Updated: 2022/10/11 14:17:08 by tnoulens         ###   ########.fr       */
+/*   Updated: 2022/10/19 14:52:10 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,11 +75,12 @@ int	ft_exit(t_minishell *minishell, int argc, char **argv)
 	if (argc == 1)
 	{
 		wrap_up_exit(minishell);
+		ft_printf("%d", minishell->exec_ret);
 		exit(minishell->exec_ret);
 	}
 	else if (argc > 2)
 		exit_1(minishell);
 	else
 		exit_args(argv, minishell);
-	return (SUCCESS);
+	return (0);
 }

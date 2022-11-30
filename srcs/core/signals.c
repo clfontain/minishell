@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: waxxy <waxxy@student.42.fr>                +#+  +:+       +#+        */
+/*   By: tnoulens <tnoulens@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/02 20:33:49 by waxxy             #+#    #+#             */
-/*   Updated: 2022/10/14 01:55:35 by waxxy            ###   ########.fr       */
+/*   Updated: 2022/10/20 18:12:56 by tnoulens         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,14 @@ static void	wrap_up_sigpipe(siginfo_t *info, void *context)
 	exit(141);
 }
 
+static void	redisplay_prompt(void)
+{
+	rl_replace_line("", 1);
+	rl_on_new_line();
+	write(2, "\n", 1);
+	rl_redisplay();
+}
+
 void	tmp_handler(int sig, siginfo_t *info, void *context)
 {
 	if (sig == SIGINT)
@@ -48,17 +56,10 @@ void	tmp_handler(int sig, siginfo_t *info, void *context)
 			unlink(g_ms->cm[g_ms->i.l]->hdpath);
 		}
 		if (g_ms->pid == 0)
-		{
-			rl_replace_line("", 1);
-			rl_on_new_line();
-			write(2, "\n", 1);
-			rl_redisplay();
-		}
+			redisplay_prompt();
 		else
 			write(2, "", 1);
 	}
-	if (sig == SIGQUIT)
-		ft_printf("\b\b");
 	if (sig == SIGTERM)
 		return (wrap_up_terminate(info, context), (void)0);
 	if (sig == SIGPIPE)
@@ -68,13 +69,16 @@ void	tmp_handler(int sig, siginfo_t *info, void *context)
 void	signal_handling(void)
 {
 	struct sigaction	sa;
+	struct sigaction	sb;
 
 	sa.sa_flags = SA_RESTART;
 	sigemptyset(&sa.sa_mask);
 	sa.sa_sigaction = tmp_handler;
+	sb.sa_flags = SA_RESTART;
+	sigemptyset(&sb.sa_mask);
+	sb.sa_handler = SIG_IGN;
 	sigaction(SIGINT, &sa, NULL);
-	sigaction(SIGQUIT, &sa, NULL);
 	sigaction(SIGTERM, &sa, NULL);
 	sigaction(SIGPIPE, &sa, NULL);
-	//signal(SIGPIPE, SIG_IGN);
+	sigaction(SIGQUIT, &sb, NULL);
 }

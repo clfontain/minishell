@@ -6,7 +6,7 @@
 /*   By: waxxy <waxxy@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/09/15 18:09:29 by waxxy             #+#    #+#             */
-/*   Updated: 2022/10/14 00:33:12 by waxxy            ###   ########.fr       */
+/*   Updated: 2022/10/17 12:59:23 by waxxy            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,7 +79,7 @@ void	check_hd(t_command **pa, int i, t_minishell *ms, int check_hdq)
 	{
 		write(STDIN_FILENO, "heredoc> ", 9);
 		p = get_next_line(pa[i]->fdhd);
-		if (p == NULL || ft_cmpchr(p, pa[i]->limiter, '\n') == 0)
+		if (p == NULL || cmpheredoc(p, pa[i]->limiter, '\n') == 0)
 		{
 			close(pa[i]->fdhd);
 			if (p == NULL)
